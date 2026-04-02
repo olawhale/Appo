@@ -1,0 +1,18 @@
+APPO.Backend/
+  Program.cs
+  appsettings.json
+  Models/
+    Workload.cs
+  Data/
+    AppDbContext.cs
+  Services/
+    WorkloadService.cs
+
+
+🔧 `appsettings.json`
+
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "ct-appo-sql-server.database.windows.net,1433;Initial Catalog=appo-db;Persist Security Info=False;User ID=sqladmin;Password=Ajesomonubioko@000;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+  }
+}
