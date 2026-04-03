@@ -8,7 +8,9 @@ on:
     branches:
       - main
   workflow_dispatch:
-
+# Opt into Node.js 24 for GitHub Actions internal runtime
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 jobs:
   build:
     runs-on: ubuntu-latest
