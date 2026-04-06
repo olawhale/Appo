@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - main
-  
+    # Removed path filters so the backend folder is ALWAYS checked out
+
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -13,15 +14,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout full repository
         uses: actions/checkout@v4
         with:
-        fetch-depth: 0
-        sparse-checkout: |
-        Appo.Backend
-        sparse-checkout-cone-mode: false
-
-          
+          fetch-depth: 0   # ensures full repo, including Appo.Backend, is always present
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
