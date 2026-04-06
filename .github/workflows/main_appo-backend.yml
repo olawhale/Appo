@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - "APPO.Backend/**"
+      - "Appo.Backend/**"
       - ".github/workflows/main_appo-backend.yml"
 
 env:
@@ -26,22 +26,22 @@ jobs:
           dotnet-version: "8.0.x"
 
       - name: Restore dependencies
-        working-directory: APPO.Backend
+        working-directory: Appo.Backend
         run: dotnet restore
 
       - name: Build
-        working-directory: APPO.Backend
+        working-directory: Appo.Backend
         run: dotnet build --configuration Release --no-restore
 
       - name: Publish
-        working-directory: APPO.Backend
-        run: dotnet publish APPO.Backend.csproj -c Release -o publish
+        working-directory: Appo.Backend
+        run: dotnet publish Appo.Backend.csproj -c Release -o publish
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: appo-backend
-          path: APPO.Backend/publish
+          path: Appo.Backend/publish
 
   deploy:
     runs-on: ubuntu-latest
