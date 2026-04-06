@@ -4,10 +4,7 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "Appo.Backend/**"
-      - ".github/workflows/main_appo-backend.yml"
-
+  
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -18,6 +15,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
