@@ -9,7 +9,6 @@ on:
       - ".github/workflows/main_appo-backend.yml"
 
 env:
-  # Opt into Node.js 24 for GitHub Actions internal runtime
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
@@ -58,5 +57,5 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: appo-backend
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_CLIENTID_8FAF967860724979858ED9381E300B73 }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: ./publish
