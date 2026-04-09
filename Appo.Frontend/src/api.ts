@@ -1,41 +1,40 @@
-export interface PecSummary {
-  currentPec: number;
-  missedPec: number;
-  upliftPotential: number;
-  pecScore: number;
-}
-
-export interface Workload {
-  id: string;
-  name: string;
-  customer: string;
-  pecStatus: string;
-  issue: string;
-  recommendation: string;
-  estimatedUplift: number;
-}
-
-export interface ForecastPoint {
-  date: string;
-  value: number;
-}
+// src/api.ts
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
-export async function getSummary() {
+// ---------- Types ----------
+export interface PecSummary {
+  total: number;
+  active: number;
+  inactive: number;
+}
+
+export interface Workload {
+  id: number;
+  name: string;
+  value: number;
+}
+
+export interface ForecastPoint {
+  date: string;   // ISO date string
+  value: number;
+}
+
+// ---------- API Calls ----------
+export async function getSummary(): Promise<PecSummary> {
   const res = await fetch(`${BASE_URL}/api/pec/summary`);
+  if (!res.ok) throw new Error("Failed to fetch summary");
   return res.json();
 }
 
-export async function fetchWorkloads(): Promise<Workload[]> {
+export async function getWorkloads(): Promise<Workload[]> {
   const res = await fetch(`${BASE_URL}/api/pec/workloads`);
-  if (!res.ok) throw new Error("Failed to load workloads");
+  if (!res.ok) throw new Error("Failed to fetch workloads");
   return res.json();
 }
 
-export async function fetchForecast(): Promise<ForecastPoint[]> {
+export async function getForecast(): Promise<ForecastPoint[]> {
   const res = await fetch(`${BASE_URL}/api/pec/forecast`);
-  if (!res.ok) throw new Error("Failed to load forecast");
+  if (!res.ok) throw new Error("Failed to fetch forecast");
   return res.json();
 }
-
