@@ -1,6 +1,6 @@
-using APPO.Backend.Models;
+using Appo.Backend.Models;
 
-namespace APPO.Backend.Services;
+namespace Appo.Backend.Services;
 
 public class PecAnalysisService
 {
