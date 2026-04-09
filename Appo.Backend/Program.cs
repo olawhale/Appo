@@ -1,18 +1,19 @@
-using Microsoft.EntityFrameworkCore;
 using Appo.Backend.Models;
-using Appo.Backend.Data;
+using Appo.Backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+builder.Services.AddSingleton<PecAnalysisService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
-        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
 });
 
 var app = builder.Build();
@@ -21,23 +22,28 @@ app.UseCors();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.MapGet("/api/workloads", async (AppDbContext db) =>
+app.MapGet("/api/pec/summary", (PecAnalysisService service) =>
 {
-    var workloads = await db.Workloads.ToListAsync();
+    var summary = service.GetPecSummary();
+    return Results.Ok(summary);
+});
+
+app.MapGet("/api/pec/workloads", (PecAnalysisService service) =>
+{
+    var workloads = service.GetWorkloads();
     return Results.Ok(workloads);
 });
 
-app.MapPost("/api/workloads", async (Workload workload, AppDbContext db) =>
+app.MapGet("/api/pec/forecast", (PecAnalysisService service) =>
 {
-    db.Workloads.Add(workload);
-    await db.SaveChangesAsync();
-    return Results.Created($"/api/workloads/{workload.Id}", workload);
+    var forecast = service.GetPecForecast()
+        .Select(p => new { date = p.Date, value = p.Value });
+    return Results.Ok(forecast);
 });
 
 app.Run();
 
 
-Run migrations with:
+Run with:
 
-dotnet ef migrations add InitialCreate
-dotnet ef database update
+dotnet run
