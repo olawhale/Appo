@@ -20,7 +20,7 @@ export interface ForecastPoint {
   value: number;
 }
 
-const BASE_URL = "appo-backend.azurewebsites.net:5000"; // match your backend port
+const BASE_URL = "import.meta.env.VITE_API_URL"; // match your backend port
 
 export async function fetchPecSummary(): Promise<PecSummary> {
   const res = await fetch(`${BASE_URL}/api/pec/summary`);
