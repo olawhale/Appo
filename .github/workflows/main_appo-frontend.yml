@@ -46,6 +46,8 @@ jobs:
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
+        name: frontend
+        path: Appo.Frontend/dist
        
       - name: Login to Azure
         uses: azure/login@v2
