@@ -20,11 +20,10 @@ export interface ForecastPoint {
   value: number;
 }
 
-const BASE_URL = "import.meta.env.VITE_API_URL"; // match your backend port
+const BASE_URL = import.meta.env.VITE_API_URL;
 
-export async function fetchPecSummary(): Promise<PecSummary> {
+export async function getSummary() {
   const res = await fetch(`${BASE_URL}/api/pec/summary`);
-  if (!res.ok) throw new Error("Failed to load PEC summary");
   return res.json();
 }
 
