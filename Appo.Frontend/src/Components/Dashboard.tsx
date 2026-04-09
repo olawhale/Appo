@@ -1,40 +1,87 @@
-import { useEffect, useState } from "react";
-import { fetchPecSummary, PecSummary } from "../api";
+// src/pages/Dashboard.tsx
 
-export function Dashboard() {
+import { useEffect, useState } from "react";
+import { getSummary, getWorkloads, getForecast, PecSummary, Workload, ForecastPoint } from "../api";
+
+export default function Dashboard() {
   const [summary, setSummary] = useState<PecSummary | null>(null);
+  const [workloads, setWorkloads] = useState<Workload[]>([]);
+  const [forecast, setForecast] = useState<ForecastPoint[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchPecSummary()
-      .then(setSummary)
-      .finally(() => setLoading(false));
+    async function loadData() {
+      try {
+        const [s, w, f] = await Promise.all([
+          getSummary(),
+          getWorkloads(),
+          getForecast()
+        ]);
+
+        setSummary(s);
+        setWorkloads(w);
+        setForecast(f);
+      } catch (err) {
+        console.error("Error loading dashboard:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadData();
   }, []);
 
-  if (loading) return <div>Loading dashboard…</div>;
-  if (!summary) return <div>Failed to load PEC summary.</div>;
+  if (loading) return <p>Loading dashboard...</p>;
 
   return (
-    <div className="dashboard">
-      <h1>APPO Dashboard</h1>
-      <div className="cards">
-        <div className="card">
-          <h3>PEC Score</h3>
-          <p className="big">{summary.pecScore}</p>
-        </div>
-        <div className="card">
-          <h3>Current PEC</h3>
-          <p>${summary.currentPec.toLocaleString()}</p>
-        </div>
-        <div className="card">
-          <h3>Missed PEC</h3>
-          <p>${summary.missedPec.toLocaleString()}/month</p>
-        </div>
-        <div className="card">
-          <h3>Uplift Potential</h3>
-          <p>+${summary.upliftPotential.toLocaleString()}/month</p>
-        </div>
-      </div>
+    <div style={{ padding: "20px" }}>
+      <h1>PEC Dashboard</h1>
+
+      {/* Summary Section */}
+      <section>
+        <h2>Summary</h2>
+        {summary ? (
+          <ul>
+            <li>Total: {summary.total}</li>
+            <li>Active: {summary.active}</li>
+            <li>Inactive: {summary.inactive}</li>
+          </ul>
+        ) : (
+          <p>No summary data available.</p>
+        )}
+      </section>
+
+      {/* Workloads Section */}
+      <section>
+        <h2>Workloads</h2>
+        {workloads.length > 0 ? (
+          <ul>
+            {workloads.map(w => (
+              <li key={w.id}>
+                {w.name}: {w.value}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No workloads available.</p>
+        )}
+      </section>
+
+      {/* Forecast Section */}
+      <section>
+        <h2>Forecast</h2>
+        {forecast.length > 0 ? (
+          <ul>
+            {forecast.map((f, i) => (
+              <li key={i}>
+                {new Date(f.date).toLocaleDateString()}: {f.value}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No forecast data available.</p>
+        )}
+      </section>
     </div>
   );
 }
