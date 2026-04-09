@@ -1,18 +1,19 @@
-import { Dashboard } from "./components/Dashboard";
-import { WorkloadTable } from "./components/WorkloadTable";
-import { ForecastChart } from "./components/ForecastChart";
-import "./App.css";
+import { useEffect, useState } from "react";
+import { getSummary } from "./api";
 
-function App() {
+export default function Summary() {
+  const [summary, setSummary] = useState(null);
+
+  useEffect(() => {
+    getSummary().then(setSummary);
+  }, []);
+
+  if (!summary) return <p>Loading...</p>;
+
   return (
-    <div className="app">
-      <Dashboard />
-      <hr />
-      <WorkloadTable />
-      <hr />
-      <ForecastChart />
+    <div>
+      <h2>PEC Summary</h2>
+      <pre>{JSON.stringify(summary, null, 2)}</pre>
     </div>
   );
 }
-
-export default App;
