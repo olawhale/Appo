@@ -1,4 +1,4 @@
-namespace APPO.Backend.Models;
+namespace Appo.Backend.Models;
 
 public class Recommendation
 {
