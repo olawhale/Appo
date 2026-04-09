@@ -42,7 +42,3 @@ app.MapGet("/api/pec/forecast", (PecAnalysisService service) =>
 });
 
 app.Run();
-
-Run with:
-
-dotnet run
